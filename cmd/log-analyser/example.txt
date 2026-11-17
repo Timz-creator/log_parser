@@ -1,1 +1,2 @@
 testing my writing skills
+[...] NVRM: Xid (0000:03:00): 14, Channel 00000001

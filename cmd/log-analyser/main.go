@@ -2,8 +2,18 @@ package main
 import (
 	"fmt"
 	"os"
+	"bufio"
 	
 )
+
+type log_entry struct {
+	timestamp string
+	GPU_id string
+	XID_code int
+	message string
+}
+
+
 
 func check(e error) {
 	if e != nil {
@@ -30,16 +40,22 @@ func CreateFile() {
 }
 
 func ReadFile() {
-	fmt.Println("reading the file, hold on bro")
+	fmt.Println("reading the XID logs, hold on bro")
 	fileName := "example.txt"
-	data, err := os.ReadFile(fileName)
+	data, err := os.Open(fileName)
 	
 	if err != nil {
 		panic(err)
 	}
+	defer data.Close()
+
+	scanner := bufio.NewScanner(data)
+	
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
 
 	fmt.Println("the file being read: " + fileName)
-	fmt.Printf("whats inside of the file you're reading: %s", data)
 }
 
 func main() {
