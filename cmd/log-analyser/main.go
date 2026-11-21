@@ -15,6 +15,28 @@ type LogEntry struct {
 	message string
 }
 
+type XIDClassification struct {
+	Description string
+	Severity string
+	Rationale string
+}
+
+//classifications -
+	//Critical - needs immediate attention
+	//Warning - should investigate issue in a timely manner
+	//Informational - merely notifying operations 
+	//Unknown - not a know XID code
+
+var XIDPolicies = map[int]XIDClassification{
+	79: {
+		Description: "GPU driver attempts to connect to GPU unsuccessfully",
+		Severity: "Critical",
+		Rationale: "GPU connectivity, probably by failing GPU hardward",
+	},
+}
+
+
+
 
 
 
@@ -84,9 +106,21 @@ func ReadFile() () {
 		if err != nil {
 			return LogEntry{}, fmt.Errorf("invalid log")
 		}
+		classifyXID(logentry.XID_code)
 
 		return logentry, nil
 
+
+	}
+
+	func classifyXID(code int) XIDClassification {
+		fmt.Println(code)
+		value, ok := XIDPolicies[code]
+		if ok != true {
+			fmt.Println("XID code doesn't exist")
+		}
+		fmt.Println(value.Severity)
+		return value
 
 	}
 
