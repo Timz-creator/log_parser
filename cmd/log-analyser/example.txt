@@ -1,1 +1,5 @@
+[...] NVRM: Xid (PCI:0000:5a:00): 13, Graphics Engine Exception.
+[...] NVRM: Xid (PCI:0000:5a:00): 79, GPU has fallen off the bus.
+[...] NVRM: Xid (PCI:0000:5a:00): 32, Invalid or corrupted push buffer stream.
+[...] NVRM: Xid (PCI:0000:5a:00): 43, GPU stopped processing.
 [...] NVRM: Xid (0000:03:00): 90, Channel 00000001

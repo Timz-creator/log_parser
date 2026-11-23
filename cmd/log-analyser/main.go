@@ -21,6 +21,15 @@ type XIDClassification struct {
 	Rationale string
 }
 
+type AnalysisReport struct {
+	total_events int
+	counts_by_XID_code map[int]int
+	Severity map[string]int
+	GPU_id map[string]int
+}
+
+var entries []LogEntry
+
 //classifications -
 	//Critical - needs immediate attention
 	//Warning - should investigate issue in a timely manner
@@ -33,7 +42,30 @@ var XIDPolicies = map[int]XIDClassification{
 		Severity: "Critical",
 		Rationale: "GPU connectivity, probably by failing GPU hardward",
 	},
+	13: {
+		Description: "Out of bounds error or illegal instruction or illegal register",
+		Severity: "Warning",
+		Rationale: "This code is a general user application faults",
+
+	},
+	32: {
+		Description: "GPU memory fault",
+		Severity: "Critical",
+		Rationale: "Event logged when a fault is reported by MMU",
+	},
+	43: {
+		Description: "GPU stopped processing",
+		Severity: "Critical",
+		Rationale: "User application hits a software induced fault and mus terminate",
+	},
+
 }
+var occurs_code = make(map[int]int)
+
+var occurs_severity = make(map[string]int)
+
+var occurs_gpu = make(map[string]int)
+
 
 
 
@@ -106,8 +138,16 @@ func ReadFile() () {
 		if err != nil {
 			return LogEntry{}, fmt.Errorf("invalid log")
 		}
-		classifyXID(logentry.XID_code)
-
+		value := classifyXID(logentry.XID_code)
+		entries = append(entries, logentry)
+		occurs_code[xidCODE2] += 1
+		occurs_gpu[logentry.GPU_id] += 1
+		analysis := AnalysisReport{
+			total_events:  ,
+			counts_by_XID_code: occurs_code,
+			GPU_id: occurs_gpu,
+			Severity: value.Severity,
+		}
 		return logentry, nil
 
 
@@ -120,7 +160,12 @@ func ReadFile() () {
 			fmt.Println("XID code doesn't exist")
 		}
 		fmt.Println(value.Severity)
+		occurs_severity[value.Severity] += 1
 		return value
+
+	}
+
+	func analysisReport()() {
 
 	}
 
