@@ -142,12 +142,7 @@ func ReadFile() () {
 		entries = append(entries, logentry)
 		occurs_code[xidCODE2] += 1
 		occurs_gpu[logentry.GPU_id] += 1
-		analysis := AnalysisReport{
-			total_events:  ,
-			counts_by_XID_code: occurs_code,
-			GPU_id: occurs_gpu,
-			Severity: value.Severity,
-		}
+		occurs_severity[value.Severity] += 1
 		return logentry, nil
 
 
@@ -160,12 +155,24 @@ func ReadFile() () {
 			fmt.Println("XID code doesn't exist")
 		}
 		fmt.Println(value.Severity)
-		occurs_severity[value.Severity] += 1
+		
 		return value
 
 	}
 
-	func analysisReport()() {
+	func generateReport(entries []LogEntry) AnalysisReport {
+		report := AnalysisReport{
+			total_events: len(entries),
+			counts_by_XID_code: occurs_code,
+			Severity: occurs_severity,
+			GPU_id: occurs_gpu,
+		}
+		return report
+
+	}
+
+	func printReport(report []AnalysisReport)  {
+		fmt.Println(report)
 
 	}
 
@@ -176,5 +183,7 @@ func ReadFile() () {
 func main() {
 	
 	ReadFile()
+	report := generateReport(entries)
+	printReport(report)
 }
 
