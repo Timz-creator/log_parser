@@ -79,7 +79,8 @@ func ReadFile() () {
 	data, err := os.Open(fileName)
 	
 	if err != nil {
-		panic(err)
+		fmt.Println("Something went wrong when opening file", err)
+		return err
 	}
 	defer data.Close()
 
@@ -142,7 +143,7 @@ func ReadFile() () {
 		entries = append(entries, logentry)
 		occurs_code[xidCODE2] += 1
 		occurs_gpu[logentry.GPU_id] += 1
-		occurs_severity[value.Severity] += 1
+		occurs_severity[value.Severity] += 14
 		return logentry, nil
 
 
@@ -171,9 +172,22 @@ func ReadFile() () {
 
 	}
 
-	func printReport(report []AnalysisReport)  {
-		fmt.Println(report)
-
+	func printReport(report AnalysisReport)  {
+		fmt.Println("======= XID ANALYSIS REPORT ======")
+		fmt.Println("Total Events:", len(entries))
+		fmt.Println("Events by XID:")
+		for k, v  := range report.counts_by_XID_code {
+			fmt.Println("XID", k, ":", v)
+		}
+		fmt.Println("Events by GPU:")
+		for k, v := range report.GPU_id {
+			fmt.Println(k, ":", v)
+		}
+		fmt.Println("Events by Severity:")
+		for k, v := range report.Severity {
+			fmt.Println(k, ":", v)
+		}
+		
 	}
 
 	
